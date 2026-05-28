@@ -1,0 +1,24 @@
+﻿@page
+@model KE03_INTDEV_SE_2_Base.Views.VoorraadBeheer.IndexModel
+@{
+}
+
+
+<h1>Voorraadbeheer</h1>
+<table class=" table">
+    <tr>
+       <th> Product</th> 
+       <th>Prijs</th>
+       <th>Voorraad</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Price</td>
+            <td>@item.Stock</td>
+        </tr>
+    }
+    
+</table>  
