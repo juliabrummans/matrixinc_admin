@@ -1,43 +1,51 @@
 ﻿@model DataAccessLayer.Models.Customer
 
 @{
-    ViewData["Title"] = "Create";
+    // AANGEPAST: Paginatitel vertaald voor de browsertab
+    ViewData["Title"] = "Nieuwe Klant Aanmaken";
 }
 
-<h1>Create</h1>
-
-<h4>Customer</h4>
+<h1 class="my-4">Nieuwe Klant Aanmaken</h1>
+<h4>Klantgegevens - Matrix Inc.</h4>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="control-label fw-bold">Naam</label>
+                        <input asp-for="Name" class="form-control" placeholder="Voer de bedrijfs- of klantnaam in" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label asp-for="Address" class="control-label fw-bold">Adres</label>
+                        <input asp-for="Address" class="form-control" placeholder="Straat, Huisnummer en Woonplaats" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group form-check mb-4">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Active" /> Klant is actief in het systeem
+                        </label>
+                    </div>
+                    
+                    <div class="form-group d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-outline-secondary">Annuleren & Terug</a>
+                        <input type="submit" value="Klant Aanmaken" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
