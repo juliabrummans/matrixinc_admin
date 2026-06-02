@@ -1,0 +1,147 @@
+﻿@model IEnumerable<DataAccessLayer.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1 class="mb-4">Products</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success mb-3 shadow-sm">
+        New Product
+    </a>
+</p>
+
+<!-- SEARCH BAR -->
+<form asp-action="Index" method="get" autocomplete="on" class="mb-4">
+    <div class="position-relative" style="max-width: 450px;">
+
+        <div class="input-group shadow-sm">
+
+            <input type="text"
+                   id="searchBox"
+                   name="searchString"
+                   class="form-control"
+                   placeholder="Search products..." />
+
+            <button class="btn btn-primary">
+                Search
+            </button>
+
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                Reset
+            </a>
+
+        </div>
+
+        <!-- AUTOCOMPLETE SUGGESTIONS -->
+        <ul id="suggestions"
+            class="list-group position-absolute w-100"
+            style="z-index: 1000; max-height: 200px; overflow-y: auto;"></ul>
+
+    </div>
+</form>
+
+<!-- PRODUCT TABLE -->
+<div class="table-responsive">
+    <table class="table table-hover table-striped align-middle">
+
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <!-- NIET KLIKBAAR -->
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+                    <td>
+                        € @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+
+                    <td style="max-width: 400px;">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+
+                    <td class="text-center">
+
+                        <a asp-action="Edit"
+                           asp-route-id="@item.Id"
+                           class="btn btn-warning btn-sm">
+                            Edit
+                        </a>
+
+                        <a asp-action="Details"
+                           asp-route-id="@item.Id"
+                           class="btn btn-info btn-sm text-white">
+                            Details
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@item.Id"
+                           class="btn btn-danger btn-sm">
+                            Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+<!-- AUTOCOMPLETE SCRIPT -->
+@section Scripts {
+    <script>
+        const searchBox = document.getElementById("searchBox");
+        const suggestions = document.getElementById("suggestions");
+
+        searchBox.addEventListener("input", function () {
+            const value = this.value;
+
+            if (!value) {
+                suggestions.innerHTML = "";
+                return;
+            }
+
+            fetch(`/Products/SearchSuggestions?term=${encodeURIComponent(value)}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    suggestions.innerHTML = "";
+
+                    data.forEach(item => {
+                        const li = document.createElement("li");
+                        li.className = "list-group-item list-group-item-action";
+                        li.style.cursor = "pointer";
+                        li.textContent = item;
+
+                        li.addEventListener("click", function () {
+                            searchBox.value = item;
+                            suggestions.innerHTML = "";
+                        });
+
+                        suggestions.appendChild(li);
+                    });
+                });
+        });
+
+        document.addEventListener("click", function (e) {
+            if (!searchBox.contains(e.target) && !suggestions.contains(e.target)) {
+                suggestions.innerHTML = "";
+            }
+        });
+    </script>
+}
