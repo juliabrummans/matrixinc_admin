@@ -1,28 +1,80 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard - Matrix Inc.";
 }
 
-<div class="alert-info">
-    <p class="p-1">
-        Dit project kun je gebruiken als startpunt voor de groeps inleveropdracht: <a href="https://moodle.zuyd.nl/mod/resource/view.php?id=1262065">KE03_INTDEV_SE_2</a>
+<div class="container-fluid mt-4">
+    <h1 class="mb-4 fw-bold">Dashboard</h1>
 
-        <ul>
-            <li>Wat ga je maken: Je realiseert samen met je casus groep een webapplicatie, een “admin-achtige” webapplicatie waarbij je gebruik maakt van ASP.NET Core MVC architecture pattern. De belangrijkste hoofdprestatie en functionele eisen van deze applicatie zijn als volgt: Het back-office team van Matrix Inc. kan de producten en bijbehorende data en details beheren in deze webapplicatie, zodat de interne en externe klanten altijd over de juiste informatie beschikken.</li>
-            
-            <li>
-                Hoe ga je dit maken?<br />
-                - Groepsopdracht.<br />
-                - Pas de principes van HCI toe (bijv. Paper prototyping, design principles etc…)<br />
-                - Jullie web applicatie maakt gebruik van het MVC architectural pattern.<br />                
-                - Je werkt met je casusgroep op 1 github repository. Tip: je kunt met branches en pull requests werken<br />
-                - Jullie applicatie maakt gebruik van responsive design, meerdere html elementen en toegepast css styles.<br />
-                - Jullie applicatie maakt gebruik van de aangeleverde data access layer voor een snelle start. Deze mag je zelf uitbreiden of aanpassen indien gewenst.<br />
-            </li>
-            <li>
-                Je krijgt een dal (data access layer) meegeleverd. Qua inhoud is die niet perfect gevuld, maar qua structuur biedt die voldoende om een mooi bestel systeem te kunnen maken. <br />
-                In het voorbeeld wordt nog geen gebruik gemaakt van de repository classes, maar direct van de db context. Het is aan jezelf om aan te passen en te kiezen hoe je dit kunt wil toepassen en/of oplossen.<br />
-                Maar mis je iets, je bent vrij om alles naar wens aan te passen! Ben creatief!
-            </li>
-        </ul>
-    </p>
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card shadow-sm border-0">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/52/Red_and_blue_pill.jpg"
+                     class="card-img-top img-fluid rounded"
+                     alt="Dashboard Afbeelding"
+                     style="object-fit: cover; max-height: 350px; width: 100%;">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white fw-bold">Acties</div>
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <a asp-controller="Customers" asp-action="Index" class="btn btn-primary mb-3">Naar Klantenbeheer</a>
+                    <a href="#" class="btn btn-outline-secondary">Producten Beheren</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white fw-bold">Systeemstatus</div>
+                <div class="card-body">
+                    <p class="mb-2"><strong>Actieve klanten:</strong> 84</p>
+                    <p class="mb-2"><strong>Openstaande orders:</strong> 12</p>
+                    <p class="mb-0 text-success fw-bold">Systeem online</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-info h-100">
+                <div class="card-header bg-info text-white fw-bold">
+                    Actueel Weer (Heerlen)
+                </div>
+                <div class="card-body text-center d-flex flex-column justify-content-center">
+                    <h3 id="weather-temp" class="fw-bold mb-1">Laden...</h3>
+                    <p id="weather-desc" class="text-muted small mb-2"></p>
+                    <span id="weather-rain" class="badge bg-primary mx-auto"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const apiUrl = 'https://api.open-meteo.com/v1/forecast?latitude=50.8882&longitude=5.9805&current=temperature_2m,wind_speed_10m,precipitation';
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const temp = data.current.temperature_2m;
+                    const wind = data.current.wind_speed_10m;
+                    const rain = data.current.precipitation;
+                    
+                    document.getElementById('weather-temp').innerText = temp + ' °C';
+                    document.getElementById('weather-desc').innerText = 'Windsnelheid: ' + wind + ' km/u';
+                    document.getElementById('weather-rain').innerText = 'Regenval: ' + rain + ' mm';
+                })
+                .catch(error => {
+                    document.getElementById('weather-temp').innerText = 'N/A';
+                    document.getElementById('weather-desc').innerText = 'Weergegevens tijdelijk niet beschikbaar';
+                });
+        });
+    </script>
+}
