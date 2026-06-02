@@ -49,7 +49,7 @@ namespace KE03_INTDEV_SE_2_Base
             return Json(results);
         }
 
-        // ---- REST VAN JOUW CONTROLLER BLIJFT EXACT HETZELFDE ----
+        // GET: Product/Details/5
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -63,6 +63,7 @@ namespace KE03_INTDEV_SE_2_Base
             return View(product);
         }
 
+        // GET: Product/Create
         public IActionResult Create()
         {
             return View();
@@ -82,6 +83,7 @@ namespace KE03_INTDEV_SE_2_Base
             return View(product);
         }
 
+        // GET: Product/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -109,6 +111,7 @@ namespace KE03_INTDEV_SE_2_Base
             return View(product);
         }
 
+        // GET: Product/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
