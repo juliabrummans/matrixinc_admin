@@ -1,36 +1,49 @@
 ﻿@model DataAccessLayer.Models.Customer
 
 @{
-    ViewData["Title"] = "Details";
+  
+    ViewData["Title"] = "Klant Details";
 }
 
-<h1>Details</h1>
+<h1 class="my-4">Klant Details</h1>
 
-<div>
-    <h4>Customer</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Active)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Active)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="card shadow-sm border-info">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Overzicht van @Model.Name</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3 fw-bold">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            
+            <dt class="col-sm-3 fw-bold">
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+            
+            <dt class="col-sm-3 fw-bold">
+                @Html.DisplayNameFor(model => model.Active)
+            </dt>
+            <dd class="col-sm-9">
+                @if (Model.Active)
+                {
+                    <span class="badge bg-success">Actief (Ja)</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Inactief (Nee)</span>
+                }
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer d-flex justify-content-between bg-light">
+        <a asp-action="Index" class="btn btn-outline-secondary">Terug naar overzicht</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Klant Bewerken</a>
+    </div>
 </div>
