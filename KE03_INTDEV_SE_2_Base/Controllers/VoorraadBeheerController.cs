@@ -21,5 +21,25 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(producten);
 
         }
+
+        public IActionResult Edit(int id)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+            return View(product);
+
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, int stock)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+            
+            product.Stock = stock;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
