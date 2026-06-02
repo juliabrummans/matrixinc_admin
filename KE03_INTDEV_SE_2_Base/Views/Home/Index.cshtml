@@ -1,4 +1,4 @@
-﻿@{
+﻿    @{
     ViewData["Title"] = "Dashboard - Matrix Inc.";
 }
 
@@ -23,7 +23,7 @@
                 <div class="card-header bg-white fw-bold">Acties</div>
                 <div class="card-body d-flex flex-column justify-content-center">
                     <a asp-controller="Customers" asp-action="Index" class="btn btn-primary mb-3">Naar Klantenbeheer</a>
-                    <a href="#" class="btn btn-outline-secondary">Producten Beheren</a>
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-outline-secondary">Producten Beheren</a>
                 </div>
             </div>
         </div>
