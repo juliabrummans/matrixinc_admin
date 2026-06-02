@@ -19,10 +19,28 @@ namespace KE03_INTDEV_SE_2_Base
         }
 
         // GET: Customers
-        public IActionResult Index()
+        public IActionResult Index(string searchString, string statusFilter)
         {
-            // A: Data wordt nu synchroon opgehaald via de repository
             var customers = _customerRepo.GetAllCustomers();
+
+            // filter op naam of adres
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                customers = customers.Where(c => c.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+                                              || c.Address.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+            }
+
+            
+            if (!string.IsNullOrEmpty(statusFilter))
+            {
+                bool isActive = statusFilter == "Active";
+                customers = customers.Where(c => c.Active == isActive);
+            }
+
+            //gekozen filters terug naar de view zodat ze in de balk blijven staan
+            ViewData["CurrentSearch"] = searchString;
+            ViewData["CurrentStatusFilter"] = statusFilter;
+
             return View(customers);
         }
 

@@ -35,7 +35,25 @@ namespace DataAccessLayer
                 new Order { Customer = customers[0], OrderDate = DateTime.Parse("2021-02-01")},
                 new Order { Customer = customers[1], OrderDate = DateTime.Parse("2021-02-01")},
                 new Order { Customer = customers[2], OrderDate = DateTime.Parse("2021-03-01")}
-            };  
+
+            };
+            // 80 testklanten voor Matrix Inc.
+            var dummyCustomers = new List<Customer>();
+
+            for (int i = 1; i <= 80; i++)
+            {
+                dummyCustomers.Add(new Customer
+                {
+                    Name = $"TestKlant {i} B.V.",
+                    Address = $"Industrieweg {i}, 1234AB Teststad",
+                    // 1 op de 5 klanten inactief
+                    Active = (i % 5 != 0)
+                });
+            }
+
+            // voeg ze toe aan de database
+            context.Customers.AddRange(dummyCustomers);
+            context.SaveChanges();
             context.Orders.AddRange(orders);
 
             var products = new Product[]
@@ -53,6 +71,7 @@ namespace DataAccessLayer
                 new Part { Name = "Hydraulische cilinder", Description = "Openen/sluiten van zware luchtsluizen of bewegende onderdelen"},
                 new Part { Name = "Koelvloeistofpomp", Description = "Koeling van de motor of elektronische systemen."}
             };
+
             context.Parts.AddRange(parts);
 
             context.SaveChanges();
