@@ -15,7 +15,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             _context = context;
         }
 
-        // INDEX
+       
         public async Task<IActionResult> Index()
         {
             var orders = await _context.Orders
@@ -26,7 +26,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(orders);
         }
 
-        // CREATE GET
+        
         public IActionResult Create()
         {
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name");
@@ -35,7 +35,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View();
         }
 
-        // CREATE POST (SIMPEL)
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int customerId, int productId, DateTime orderDate)
@@ -62,7 +62,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // DETAILS
+       
         public async Task<IActionResult> Details(int id)
         {
             var order = await _context.Orders
@@ -75,7 +75,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(order);
         }
 
-        // DELETE
+        
         public async Task<IActionResult> Delete(int id)
         {
             var order = await _context.Orders
@@ -120,24 +120,28 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         }
 
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Order order)
         {
-            if (id != order.Id) return NotFound();
-
-            if (ModelState.IsValid)
+            if (id != order.Id)
             {
-                _context.Update(order);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
 
-            ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", order.CustomerId);
-            ViewBag.Products = new SelectList(_context.Products, "Id", "Name");
+            var existingOrder = await _context.Orders.FindAsync(id);
 
-            return View(order);
+            if (existingOrder == null)
+            {
+                return NotFound();
+            }
+
+            existingOrder.OrderDate = order.OrderDate;
+            existingOrder.CustomerId = order.CustomerId;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
 
