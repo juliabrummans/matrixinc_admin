@@ -2,17 +2,20 @@
     ViewData["Title"] = "Create Order";
 }
 
-<h1>Create Order</h1>
+<h1>Nieuwe Bestelling</h1>
 
 <form asp-action="Create">
 
     <div class="mb-3">
-        <label>Order Date</label>
-        <input name="orderDate" type="date" class="form-control" />
+        <label>Bestelling Datum</label>
+        <input name="orderDate"
+               type="date"
+               class="form-control"
+               min="@DateTime.Today.ToString("yyyy-MM-dd")" />
     </div>
 
     <div class="mb-3">
-        <label>Customer</label>
+        <label>Klant</label>
         <select name="customerId" class="form-control" asp-items="ViewBag.Customers"></select>
     </div>
 
@@ -21,6 +24,6 @@
         <select name="productId" class="form-control" asp-items="ViewBag.Products"></select>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary">Opslaan</button>
 
 </form>
