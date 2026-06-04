@@ -4,42 +4,70 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Models;
-// n: nieuw   a : aangepaste code 
+
 namespace KE03_INTDEV_SE_2_Base
 {
     public class CustomersController : Controller
     {
-        // N: gebruik nu de ICustomerRepository interface in plaats van de directe MatrixIncDbContext.
         private readonly ICustomerRepository _customerRepo;
 
-        // N: De constructor ontvangt de repository nu via Dependency Injection.
         public CustomersController(ICustomerRepository customerRepo)
         {
             _customerRepo = customerRepo;
         }
 
         // GET: Customers
-        public IActionResult Index(string searchString, string statusFilter)
+        // A: Parameter sortOrder toegevoegd om de gekozen sortering te ontvangen
+        public IActionResult Index(string searchString, string statusFilter, string sortOrder)
         {
             var customers = _customerRepo.GetAllCustomers();
 
-            // filter op naam of adres
+            // Sla de huidige filters en sortering op voor de frontend links
+            ViewData["CurrentSearch"] = searchString;
+            ViewData["CurrentStatusFilter"] = statusFilter;
+            ViewData["CurrentSort"] = sortOrder;
+
+            // N: Wissel klaarzetten voor het omdraaien van de sorteerrichting bij een klik
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["AddressSortParm"] = sortOrder == "Address" ? "address_desc" : "Address";
+            ViewData["OrderSortParm"] = sortOrder == "Order" ? "order_desc" : "Order";
+
+            // Filter op zoekterm
             if (!string.IsNullOrEmpty(searchString))
             {
                 customers = customers.Where(c => c.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase)
                                               || c.Address.Contains(searchString, StringComparison.OrdinalIgnoreCase));
             }
 
-            
+            // Filter op status open of geen bestelling
             if (!string.IsNullOrEmpty(statusFilter))
             {
-                bool isActive = statusFilter == "Active";
-                customers = customers.Where(c => c.Active == isActive);
+                bool hasOrder = statusFilter == "Active";
+                customers = customers.Where(c => c.Active == hasOrder);
             }
 
-            //gekozen filters terug naar de view zodat ze in de balk blijven staan
-            ViewData["CurrentSearch"] = searchString;
-            ViewData["CurrentStatusFilter"] = statusFilter;
+            // N: Sorteren op basis van de gekozen sortering
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    customers = customers.OrderByDescending(c => c.Name);
+                    break;
+                case "Address":
+                    customers = customers.OrderBy(c => c.Address);
+                    break;
+                case "address_desc":
+                    customers = customers.OrderByDescending(c => c.Address);
+                    break;
+                case "Order":
+                    customers = customers.OrderBy(c => c.Active);
+                    break;
+                case "order_desc":
+                    customers = customers.OrderByDescending(c => c.Active);
+                    break;
+                default:
+                    customers = customers.OrderBy(c => c.Name);
+                    break;
+            }
 
             return View(customers);
         }
@@ -47,17 +75,10 @@ namespace KE03_INTDEV_SE_2_Base
         // GET: Customers/Details/5
         public IActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            // A: Specifieke klant wordt opgehaald via de repository methode GetCustomerById.
             var customer = _customerRepo.GetCustomerById(id.Value);
-            if (customer == null)
-            {
-                return NotFound();
-            }
+            if (customer == null) return NotFound();
 
             return View(customer);
         }
@@ -75,7 +96,6 @@ namespace KE03_INTDEV_SE_2_Base
         {
             if (ModelState.IsValid)
             {
-                // A: Het opslaan van een nieuwe klant verloopt nu via de repository.
                 _customerRepo.AddCustomer(customer);
                 return RedirectToAction(nameof(Index));
             }
@@ -85,17 +105,11 @@ namespace KE03_INTDEV_SE_2_Base
         // GET: Customers/Edit/5
         public IActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            // a: Bestaande gegevens ophalen via de repository om het formulier te vullen.
             var customer = _customerRepo.GetCustomerById(id.Value);
-            if (customer == null)
-            {
-                return NotFound();
-            }
+            if (customer == null) return NotFound();
+
             return View(customer);
         }
 
@@ -104,14 +118,10 @@ namespace KE03_INTDEV_SE_2_Base
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("Id,Name,Address,Active")] Customer customer)
         {
-            if (id != customer.Id)
-            {
-                return NotFound();
-            }
+            if (id != customer.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
-                // A: Wijzigingen opslaan via de repository methode UpdateCustomer.
                 _customerRepo.UpdateCustomer(customer);
                 return RedirectToAction(nameof(Index));
             }
@@ -121,17 +131,10 @@ namespace KE03_INTDEV_SE_2_Base
         // GET: Customers/Delete/5
         public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            // A: Gegevens ophalen via de repository om de bevestigingspagina te tonen.
             var customer = _customerRepo.GetCustomerById(id.Value);
-            if (customer == null)
-            {
-                return NotFound();
-            }
+            if (customer == null) return NotFound();
 
             return View(customer);
         }
@@ -141,14 +144,11 @@ namespace KE03_INTDEV_SE_2_Base
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            // A: Eerst de klant ophalen via de repository omdat DeleteCustomer het volledige model verwacht.
             var customer = _customerRepo.GetCustomerById(id);
             if (customer != null)
             {
-                // A: Verwijdering doorvoeren via de repository.
                 _customerRepo.DeleteCustomer(customer);
             }
-
             return RedirectToAction(nameof(Index));
         }
     }
