@@ -41,5 +41,14 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public ActionResult Details(int id)
+
+        {
+            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+
+            return View (product);
+        }
+
     }
 }

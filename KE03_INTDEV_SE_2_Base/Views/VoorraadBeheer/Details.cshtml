@@ -1,0 +1,19 @@
+﻿@model DataAccessLayer.Models.Product
+<h1>Product Details</h1>
+<hr />
+<p><strong>Naam:</strong> @Model.Name</p>
+<p><strong>Beschrijving:</strong> @Model.Description</p>
+<p><strong>Prijs:</strong>@Model.Price</p>
+<p><strong>Voorraad:</strong>@Model.Stock</p>
+<a href="/VoorraadBeheer/Edit/@Model.Id" class="btn btn-warning">
+    Voorraad aanpassen
+
+</a>
+
+<a href="/Voorraadbeheer" class="btn btn-secondary">
+   Terug
+</a>
+
+<a class="btn btn-success" href="#">
+    Bijbestellen
+</a>

@@ -37,17 +37,16 @@ namespace DataAccessLayer
                 new Order { Customer = customers[2], OrderDate = DateTime.Parse("2021-03-01")}
 
             };
-            // 80 testklanten voor Matrix Inc.
+            // 80 testklanten toevoegen
             var dummyCustomers = new List<Customer>();
-
             for (int i = 1; i <= 80; i++)
             {
                 dummyCustomers.Add(new Customer
                 {
                     Name = $"TestKlant {i} B.V.",
                     Address = $"Industrieweg {i}, 1234AB Teststad",
-                    // 1 op de 5 klanten inactief
-                    Active = (i % 5 != 0)
+                    // AANGEPAST: Alleen als het getal deelbaar is door 10, krijgt de klant een openstaande bestelling (slechts 10%)
+                    Active = (i % 10 == 0)
                 });
             }
 
