@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<DataAccessLayer.Models.Product>
 
 @{
-    ViewData["Title"] = "Products";
+    ViewData["Title"] = "Producten";
 }
 
-<h1 class="mb-4">Products</h1>
+<h1 class="mb-4">Producten</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-primary btn-sm">
-        New Product
+        Nieuwe Product
     </a>
 </p>
 
@@ -22,10 +22,10 @@
                    id="searchBox"
                    name="searchString"
                    class="form-control"
-                   placeholder="Search products..." />
+                   placeholder="Zoek product..." />
 
             <button class="btn btn-primary">
-                Search
+                Zoek
             </button>
 
             <a asp-action="Index" class="btn btn-outline-secondary">
@@ -48,10 +48,10 @@
 
         <thead class="table-dark">
             <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Description</th>
-                <th class="text-center">Actions</th>
+                <th>Naam</th>
+                <th>Prijs</th>
+                <th>Beschrijving</th>
+                <th class="text-center">Acties</th>
             </tr>
         </thead>
 
@@ -78,19 +78,19 @@
                         <a asp-action="Edit"
                            asp-route-id="@item.Id"
                            class="btn btn-warning btn-sm">
-                            Edit
+                            Bewerken
                         </a>
 
                         <a asp-action="Details"
                            asp-route-id="@item.Id"
                            class="btn btn-primary btn-sm">
-                           Details
+                            Details
                         </a>
 
                         <a asp-action="Delete"
                            asp-route-id="@item.Id"
                            class="btn btn-danger btn-sm">
-                            Delete
+                            Verwijderen
                         </a>
 
                     </td>
