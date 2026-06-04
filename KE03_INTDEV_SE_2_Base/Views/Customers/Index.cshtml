@@ -1,24 +1,26 @@
 ﻿@model IEnumerable<DataAccessLayer.Models.Customer>
 
 @{
-    ViewData["Title"] = "Index";
+    // A: Nederlands
+    ViewData["Title"] = "Klantenoverzicht";
 }
 
-<h1>Index</h1>
+<h1 class="my-4">Klantenoverzicht</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary shadow-sm">Create New</a>
+    <a asp-action="Create" class="btn btn-primary shadow-sm">Nieuwe klant aanmaken</a>
 </p>
-<form asp-action="Index" method="get" class="mb-3">
-    <div class="row align-items-center">
+
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="row align-items-center g-2">
         <div class="col-md-4">
-            <input type="text" name="searchString" value="@ViewData["CurrentSearch"]" class="form-control" placeholder="Zoek op nam of adres..." />
+            <input type="text" name="searchString" value="@ViewData["CurrentSearch"]" class="form-control" placeholder="Zoek op naam of adres..." />
         </div>
         <div class="col-md-3">
             <select name="statusFilter" class="form-select">
-                <option value="">-- Alle statussen --</option>
-                <option value="Active" selected="@((string)ViewData["CurrentStatusFilter"] == "Active")">Actief</option>
-                <option value="Inactive" selected="@((string)ViewData["CurrentStatusFilter"] == "Inactive")">Inactief</option>
+                <option value="">-- Alle bestellingen --</option>
+                <option value="Active" selected="@((string)ViewData["CurrentStatusFilter"] == "Active")">Met openstaande bestelling</option>
+                <option value="Inactive" selected="@((string)ViewData["CurrentStatusFilter"] == "Inactive")">Zonder openstaande bestelling</option>
             </select>
         </div>
         <div class="col-md-4">
@@ -27,17 +29,24 @@
         </div>
     </div>
 </form>
+
 <table class="table table-striped table-hover mt-3 shadow-sm border rounded">
     <thead class="table-dark">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-searchString="@ViewData["CurrentSearch"]" asp-route-statusFilter="@ViewData["CurrentStatusFilter"]" class="text-white text-decoration-none">
+                    Naam ↓↑
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AddressSortParm"]" asp-route-searchString="@ViewData["CurrentSearch"]" asp-route-statusFilter="@ViewData["CurrentStatusFilter"]" class="text-white text-decoration-none">
+                    Adres ↓↑
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Active)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["OrderSortParm"]" asp-route-searchString="@ViewData["CurrentSearch"]" asp-route-statusFilter="@ViewData["CurrentStatusFilter"]" class="text-white text-decoration-none">
+                    Openstaande bestelling ↓↑
+                </a>
             </th>
             <th>Acties</th>
         </tr>
@@ -55,17 +64,17 @@
                 <td>
                     @if (item.Active)
                     {
-                        <span class="badge bg-success">Actief (Ja)</span>
+                        <span class="badge bg-success">Ja</span>
                     }
                     else
                     {
-                        <span class="badge bg-danger">Inactief (Nee)</span>
+                        <span class="badge bg-secondary">Nee</span>
                     }
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Bewerken</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Verwijderen</a>
                 </td>
             </tr>
         }
