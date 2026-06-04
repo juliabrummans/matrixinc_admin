@@ -1,0 +1,20 @@
+﻿@model DataAccessLayer.Models.Product
+<h1> Voorraad aanpassen</h1>
+
+<p>@Model.Name</p>
+<p>@Model.Price</p>
+
+<form method="post">
+    
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <label>Voorraad</label>
+    <input type="number" name="stock" value="@Model.Stock"/>
+
+    <button type="submit">
+        Opslaan
+    </button>
+
+
+
+</form>

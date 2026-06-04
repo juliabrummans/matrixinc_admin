@@ -1,0 +1,30 @@
+﻿@model IEnumerable<DataAccessLayer.Models.Product>
+
+<h1>Voorraadbeheer</h1>
+<table class=" table">
+    <tr>
+        <th> Product</th>
+        <th>Prijs</th>
+        <th>Voorraad</th>
+        <th>Actie</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Price</td>
+            <td>@item.Stock</td>
+            <td>
+                <a class="btn btn-primary"
+                   href="/VoorraadBeheer/Details/@item.Id">
+                    Details
+                </a>   
+                <a class="btn btn-primary"
+                   href="/VoorraadBeheer/Edit/@item.Id">
+               </a>
+            </td>
+        </tr>
+    }
+
+</table>
