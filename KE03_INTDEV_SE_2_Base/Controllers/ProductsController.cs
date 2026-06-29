@@ -18,30 +18,48 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             _context = context;
         }
 
-        // GET: Products (SEARCH)
-        public async Task<IActionResult> Index(string searchString)
+        // GET: Products (SEARCH + FILTER + CASE INSENSITIVE)
+        public async Task<IActionResult> Index(string searchString, decimal? minPrice, decimal? maxPrice)
         {
             var products = _context.Products.AsQueryable();
 
+            // SEARCH (case-insensitive)
             if (!string.IsNullOrWhiteSpace(searchString))
             {
+                searchString = searchString.ToLower();
+
                 products = products.Where(p =>
                     p.Name != null &&
-                    p.Name.Contains(searchString));
+                    p.Name.ToLower().Contains(searchString));
+            }
+
+            // FILTER: min price
+            if (minPrice.HasValue)
+            {
+                products = products.Where(p => p.Price >= minPrice.Value);
+            }
+
+            // FILTER: max price
+            if (maxPrice.HasValue)
+            {
+                products = products.Where(p => p.Price <= maxPrice.Value);
             }
 
             return View(await products.ToListAsync());
         }
 
-        // AUTOCOMPLETE SUGGESTIONS
+        // AUTOCOMPLETE (CASE INSENSITIVE)
         [HttpGet]
         public async Task<IActionResult> SearchSuggestions(string term)
         {
             if (string.IsNullOrWhiteSpace(term))
                 return Json(new List<string>());
 
+            term = term.ToLower();
+
             var results = await _context.Products
-                .Where(p => p.Name != null && p.Name.Contains(term))
+                .Where(p => p.Name != null &&
+                            p.Name.ToLower().Contains(term))
                 .Select(p => p.Name)
                 .Take(5)
                 .ToListAsync();
@@ -49,8 +67,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return Json(results);
         }
 
-        // GET: Product/Details/5
-
+        // DETAILS
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -63,7 +80,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(product);
         }
 
-        // GET: Product/Create
+        // CREATE
         public IActionResult Create()
         {
             return View();
@@ -83,7 +100,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(product);
         }
 
-        // GET: Product/Edit/5
+        // EDIT
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -111,7 +128,7 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(product);
         }
 
-        // GET: Product/Delete/5
+        // DELETE
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
