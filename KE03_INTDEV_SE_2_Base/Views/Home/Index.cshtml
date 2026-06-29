@@ -17,6 +17,9 @@
                 
                 <div class="col-6 col-md-3">
                     <div class="card border-0 text-center shadow" style="background-color: rgba(255, 255, 255, 0.95); min-height: 110px;">
+                        <a asp-controller="Orders"
+                           asp-action="Index"
+                           class="stretched-link"></a>
                         <div class="card-body d-flex flex-column justify-content-center align-items-center">
                             <span class="text-muted small fw-bold text-uppercase">Openstaande Orders</span>
                             <h3 class="fw-bold text-dark m-0 mt-1">12</h3>
@@ -26,6 +29,9 @@
 
                 <div class="col-6 col-md-3">
                     <div class="card border-0 text-center shadow" style="background-color: rgba(255, 255, 255, 0.95); min-height: 110px;">
+                        <a asp-controller="Klachten"
+                           asp-action="Index"
+                           class="stretched-link"></a>
                         <div class="card-body d-flex flex-column justify-content-center align-items-center">
                             <span class="text-muted small fw-bold text-uppercase">Klachten</span>
                             <h3 class="fw-bold text-danger m-0 mt-1">2</h3>
@@ -35,6 +41,9 @@
 
                 <div class="col-6 col-md-3">
                     <div class="card border-0 text-center shadow" style="background-color: rgba(255, 255, 255, 0.95); min-height: 110px;">
+                        <a asp-controller="Bezorgers"
+                           asp-action="Index"
+                           class="stretched-link"></a>
                         <div class="card-body d-flex flex-column justify-content-center align-items-center">
                             <span class="text-muted small fw-bold text-uppercase">Actieve Bezorgers</span>
                             <h3 class="fw-bold text-success m-0 mt-1">7</h3>
@@ -53,6 +62,9 @@
                 <div class="card-header bg-white fw-bold border-bottom-0 pt-3">
                     Nieuwste binnengekomen orders
                 </div>
+                <a asp-controller="Orders"
+                   asp-action="Index"
+                   class="stretched-link"></a>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
