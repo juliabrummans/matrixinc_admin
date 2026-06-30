@@ -1,0 +1,35 @@
+﻿@model IEnumerable<KE03_INTDEV_SE_2_Base.Models.OrderPickViewModel>
+
+@{
+    ViewData["Title"] = "Orderhistorie";
+}
+
+<h2 class="mb-4">Orderhistorie</h2>
+
+<table class="table table-bordered table-striped bg-white shadow-sm">
+    <thead class="table-secondary">
+        <tr>
+            <th>Order ID</th>
+            <th>Totaal Producten</th>
+            <th>Doellocatie</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td class="fw-bold text-muted">#@order.OrderId</td>
+                <td>@order.Items.Sum(i => i.Quantity) stuks</td>
+                <td>@order.DropLocation</td>
+                <td><span class="badge bg-success">@order.Status</span></td>
+            </tr>
+        }
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="4">Nog geen orders afgehandeld.</td>
+            </tr>
+        }
+    </tbody>
+</table>

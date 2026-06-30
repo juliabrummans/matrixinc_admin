@@ -13,7 +13,7 @@
             body {
                 overflow-x: hidden;
             }
-            /* Vaste linkerzijbalk */
+
             .sidebar {
                 width: 260px;
                 min-height: 100vh;
@@ -24,13 +24,14 @@
                 left: 0;
                 z-index: 100;
             }
-            /* Wrapper voor alle content rechts van de zijbalk */
+
             .main-wrapper {
                 margin-left: 260px;
                 min-height: 100vh;
                 display: flex;
                 flex-direction: column;
             }
+
             .sidebar .nav-link {
                 padding: 12px 20px;
                 display: flex;
@@ -49,7 +50,7 @@
                     font-size: 1.25rem;
                     line-height: 1;
                 }
-            /* A: flexbox space-between voor zoekbalk links en account/privacy rechts */
+
             .top-utility-bar {
                 height: 60px;
                 background-color: #ffffff;
@@ -74,13 +75,21 @@
         </div>
         
         <ul class="nav flex-column flex-grow-1">
+            <!-- Beginpagina (Dashboard) is nu Te Picken Orders -->
             <li class="nav-item">
-                <a class="nav-link text-secondary" asp-area="" asp-controller="Home" asp-action="Index">
+                <a class="nav-link text-dark fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">
                     <i class="bi bi-speedometer2"></i>
-                    <span>Dashboard</span>
+                    <span>Dashboard / Te Picken</span>
                 </a>
             </li>
             
+            <li class="nav-item">
+                <a class="nav-link text-dark fw-semibold" asp-area="" asp-controller="Orders" asp-action="Historie">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Orderhistorie</span>
+                </a>
+            </li>
+
             <hr class="mx-3 my-2 text-muted" />
             
             <li class="nav-item">
@@ -99,12 +108,6 @@
                 <a class="nav-link text-dark fw-semibold" asp-area="" asp-controller="VoorraadBeheer" asp-action="Index">
                     <i class="bi bi-boxes"></i>
                     <span>Voorraad</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark fw-semibold" asp-area="" asp-controller="Orders" asp-action="Index">
-                    <i class="bi bi-clipboard"></i>
-                    <span>Orders</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -129,9 +132,7 @@
     </div>
 
     <div class="main-wrapper">
-        
         <div class="top-utility-bar">
-            
             <div class="d-flex align-items-center flex-grow-1" style="max-width: 320px;">
                 <div class="input-group input-group-sm border rounded bg-light">
                     <span class="input-group-text bg-transparent border-0 text-muted"><i class="bi bi-search"></i></span>
@@ -156,7 +157,6 @@
                     </ul>
                 </div>
             </div>
-
         </div>
         
         <div class="container-fluid p-4 flex-grow-1">

@@ -1,40 +1,45 @@
-﻿@model IEnumerable<DataAccessLayer.Models.Order>
+﻿@model IEnumerable<KE03_INTDEV_SE_2_Base.Models.OrderPickViewModel>
 
 @{
-    ViewData["Title"] = "Orders";
+    ViewData["Title"] = "Te Picken Orders";
 }
 
-<h1>Orders</h1>
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Te Picken Orders</h2>
+        <!-- Knopje naar historie -->
+        <a asp-action="Historie" class="btn btn-outline-secondary">Bekijk Orderhistorie</a>
+    </div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Maak nieuwe bestelling</a>
-</p>
-
-<table class="table table-striped table-hover mt-3 shadow-sm border rounded">
-    <thead class="table-dark">
-        <tr>
-            <th>Id</th>
-            <th>Bestelling datum</th>
-            <th>Klant</th>
-            <th>Producten</th>
-            <th>Acties</th>
-        </tr>
-    </thead>
-
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Id</td>
-            <td>@item.OrderDate.ToString("dd-MM-yyyy")</td>
-            <td>@item.Customer?.Name</td>
-            <td>@item.Products.Count</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Bewerken</a>
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-sm text-white">Details</a>
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Verwijderen</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+    <table class="table table-bordered table-striped bg-white shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Order ID</th>
+                <th>Aantal Regels</th>
+                <th>Doel/Krat</th>
+                <th>Actie</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td class="fw-bold">#@order.OrderId</td>
+                    <td>@order.Items.Count items</td>
+                    <td>@order.DropLocation</td>
+                    <td>
+                        <a asp-controller="Orders" asp-action="PickOrder" asp-route-id="@order.OrderId" class="btn btn-primary btn-sm">
+                            Start Picken
+                        </a>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="4" class="text-success fw-bold text-center py-3">Alle orders zijn verwerkt!</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
