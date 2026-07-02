@@ -10,22 +10,22 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
         public static List<OrderPickViewModel> MockOrders = new List<OrderPickViewModel>
         {
             new OrderPickViewModel {
-                OrderId = 1042, DropLocation = "Krat 1", Status = "Te verwerken", StatusColor = "danger",
-                Items = new List<PickItemViewModel> {
-                    new PickItemViewModel { ProductId = 1, Quantity = 5, ProductName = "Banaan", ProductLocation = "A.01.04", IsPicked = false },
-                    new PickItemViewModel { ProductId = 2, Quantity = 2, ProductName = "Appel", ProductLocation = "B.12.01", IsPicked = false }
+                OrderId = 1042, DropLocation = " F.01 ", Status = "Te verwerken", StatusColor = "danger",
+                Items = new List<OrderPickViewModel.PickItemViewModel> {
+                    new OrderPickViewModel.PickItemViewModel { ProductId = 1, Quantity = 5, ProductName = "Verzinkte spaanplaatschroef 3,0 x 12 mm Torx", ProductLocation = "B.12.02", IsPicked = false },
+                    new OrderPickViewModel.PickItemViewModel { ProductId = 2, Quantity = 2, ProductName = "Hardhoutschroef RVS A4 5 x 60 mm Torx 25", ProductLocation = "B.12.01", IsPicked = false }
                 }
             },
             new OrderPickViewModel {
-                OrderId = 1043, DropLocation = "Krat 2", Status = "Te verwerken", StatusColor = "danger",
-                Items = new List<PickItemViewModel> {
-                    new PickItemViewModel { ProductId = 3, Quantity = 10, ProductName = "Mandarijn", ProductLocation = "C.05.09", IsPicked = false }
+                OrderId = 1043, DropLocation = "F.02", Status = "Te verwerken", StatusColor = "danger",
+                Items = new List<OrderPickViewModel.PickItemViewModel> {
+                    new OrderPickViewModel.PickItemViewModel { ProductId = 3, Quantity = 10, ProductName = "Schroef a34 ", ProductLocation = "C.05.09", IsPicked = false }
                 }
             },
             new OrderPickViewModel {
                 OrderId = 1044, DropLocation = "Verzonden", Status = "Afgehandeld", StatusColor = "success",
-                Items = new List<PickItemViewModel> {
-                    new PickItemViewModel { ProductId = 4, Quantity = 3, ProductName = "Peer", ProductLocation = "A.01.05", IsPicked = true }
+                Items = new List<OrderPickViewModel.PickItemViewModel> {
+                    new OrderPickViewModel.PickItemViewModel { ProductId = 4, Quantity = 3, ProductName = "Peer", ProductLocation = "A.01.05", IsPicked = true }
                 }
             }
         };

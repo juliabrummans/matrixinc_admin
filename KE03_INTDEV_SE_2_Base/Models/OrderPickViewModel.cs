@@ -1,4 +1,10 @@
 ﻿using System.Collections.Generic;
+using DataAccessLayer.Models;
+using DataAccessLayer; 
+using System;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace KE03_INTDEV_SE_2_Base.Models
 {
@@ -7,16 +13,82 @@ namespace KE03_INTDEV_SE_2_Base.Models
         public int OrderId { get; set; }
         public string? DropLocation { get; set; }
         public string? Status { get; set; }
-        public string? StatusColor { get; set; } // Ontbrekende eigenschap toegevoegd
-        public List<PickItemViewModel> Items { get; set; } = new List<PickItemViewModel>(); // Standaard lege lijst
+        public string? StatusColor { get; set; } 
+        public List<PickItemViewModel> Items { get; set; } = new List<PickItemViewModel>(); 
+
+        public class PickItemViewModel
+        {
+            public int ProductId { get; set; }
+            public string? ProductName { get; set; }
+            public int Quantity { get; set; }
+            public string? ProductLocation { get; set; }
+            public bool IsPicked { get; set; }
+        }
     }
 
-    public class PickItemViewModel
+    public static class MatrixIncDbInitializer
     {
-        public int ProductId { get; set; }
-        public string? ProductName { get; set; }
-        public int Quantity { get; set; }
-        public string? ProductLocation { get; set; }
-        public bool IsPicked { get; set; }
+        public static void Initialize(MatrixIncDbContext context)
+        {
+            if (context.Customers.Any())
+            {
+                return;
+            }
+
+            var customers = new Customer[]
+            {
+                new Customer { Name = "Neo", Address = "123 Elm St" , Active=true},
+                new Customer { Name = "Morpheus", Address = "456 Oak St", Active = true },
+                new Customer { Name = "Trinity", Address = "789 Pine St", Active = true }
+            };
+            context.Customers.AddRange(customers);
+
+            var orders = new Order[]
+            {
+                new Order { Customer = customers[0], OrderDate = DateTime.Parse("2021-01-01")},
+                new Order { Customer = customers[0], OrderDate = DateTime.Parse("2021-02-01")},
+                new Order { Customer = customers[1], OrderDate = DateTime.Parse("2021-02-01")},
+                new Order { Customer = customers[2], OrderDate = DateTime.Parse("2021-03-01")}
+
+            };
+            // 80 dummy klanten
+            var dummyCustomers = new List<Customer>();
+            for (int i = 1; i <= 80; i++)
+            {
+                dummyCustomers.Add(new Customer
+                {
+                    Name = $"TestKlant {i} B.V.",
+                    Address = $"Industrieweg {i}, 1234AB Teststad",
+                    Active = (i % 10 == 0)
+                });
+            }
+
+            // voeg ze toe aan de database
+            context.Customers.AddRange(dummyCustomers);
+            context.SaveChanges();
+            context.Orders.AddRange(orders);
+
+            var products = new Product[]
+            {
+                new Product { Name = "Nebuchadnezzar", Description = "Het schip waarop Neo voor het eerst de echte wereld leert kennen", Price = 10000.00m },
+                new Product { Name = "Jack-in Chair", Description = "Stoel met een rugsteun en metalen armen waarin mensen zitten om ingeplugd te worden in de Matrix via een kabel in de nekpoort", Price = 500.50m },
+                new Product { Name = "EMP (Electro-Magnetic Pulse) Device", Description = "Wapentuig op de schepen van Zion", Price = 129.99m }
+            };
+            context.Products.AddRange(products);
+
+            var parts = new Part[]
+            {
+                new Part { Name = "Tandwiel", Description = "Overdracht van rotatie in bijvoorbeeld de motor of luikmechanismen"},
+                new Part { Name = "M5 Boutje", Description = "Bevestiging van panelen, buizen of interne modules"},
+                new Part { Name = "Hydraulische cilinder", Description = "Openen/sluiten van zware luchtsluizen of bewegende onderdelen"},
+                new Part { Name = "Koelvloeistofpomp", Description = "Koeling van de motor of elektronische systemen."}
+            };
+
+            context.Parts.AddRange(parts);
+
+            context.SaveChanges();
+
+            context.Database.EnsureCreated();
+        }
     }
 }

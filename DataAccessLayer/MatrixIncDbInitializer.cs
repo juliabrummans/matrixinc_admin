@@ -11,16 +11,11 @@ namespace DataAccessLayer
     {
         public static void Initialize(MatrixIncDbContext context)
         {
-            // Look for any customers.
             if (context.Customers.Any())
             {
-                return;   // DB has been seeded
+                return;
             }
 
-            // TODO: Hier moet ik nog wat namen verzinnen die betrekking hebben op de matrix.
-            // - Denk aan de m3 boutjes, moertjes en ringetjes.
-            // - Denk aan namen van schepen
-            // - Denk aan namen van vliegtuigen            
             var customers = new Customer[]
             {
                 new Customer { Name = "Neo", Address = "123 Elm St" , Active=true},
@@ -37,7 +32,7 @@ namespace DataAccessLayer
                 new Order { Customer = customers[2], OrderDate = DateTime.Parse("2021-03-01")}
 
             };
-            // 80 testklanten toevoegen
+            // 80 dummy klanten
             var dummyCustomers = new List<Customer>();
             for (int i = 1; i <= 80; i++)
             {
@@ -45,7 +40,6 @@ namespace DataAccessLayer
                 {
                     Name = $"TestKlant {i} B.V.",
                     Address = $"Industrieweg {i}, 1234AB Teststad",
-                    // AANGEPAST: Alleen als het getal deelbaar is door 10, krijgt de klant een openstaande bestelling (slechts 10%)
                     Active = (i % 10 == 0)
                 });
             }

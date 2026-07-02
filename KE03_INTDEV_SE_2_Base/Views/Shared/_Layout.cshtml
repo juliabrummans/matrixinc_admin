@@ -75,14 +75,19 @@
         </div>
         
         <ul class="nav flex-column flex-grow-1">
-            <!-- Beginpagina (Dashboard) is nu Te Picken Orders -->
+            <!-- Zijbalk -->
             <li class="nav-item">
                 <a class="nav-link text-dark fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">
                     <i class="bi bi-speedometer2"></i>
-                    <span>Dashboard / Te Picken</span>
+                    <span>Dashboard </span>
                 </a>
             </li>
-            
+            <li class="nav-item">
+                <a class="nav-link text-dark fw-semibold" asp-area="" asp-controller="Orders" asp-action="Index">
+                    <i class="bi bi-clipboard-check"></i>
+                    <span>Te Picken Orders</span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link text-dark fw-semibold" asp-area="" asp-controller="Orders" asp-action="Historie">
                     <i class="bi bi-clock-history"></i>

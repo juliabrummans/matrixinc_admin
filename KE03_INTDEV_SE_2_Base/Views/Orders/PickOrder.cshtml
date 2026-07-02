@@ -22,10 +22,10 @@
                         <input type="hidden" asp-for="Items[i].Quantity" />
                         <input type="hidden" asp-for="Items[i].ProductLocation" />
                         
-                        <!-- Simpele checkbox -->
+                        <!-- checkbox -->
                         <input type="checkbox" asp-for="Items[i].IsPicked" class="pick-checkbox form-check-input me-3" style="width: 20px; height: 20px;" id="item_@i" />
                         
-                        <!-- Format: Aantal x Productnaam (Locatie) -->
+                        <!-- Aantal en Productnaam (Locatie) -->
                         <label class="form-check-label fs-5" for="item_@i">
                             <strong>@Model.Items[i].Quantity x</strong> @Model.Items[i].ProductName <span class="text-primary fw-bold ms-2">(@Model.Items[i].ProductLocation)</span>
                         </label>
@@ -33,7 +33,7 @@
                 }
             </ul>
 
-            <!-- Verborgen knop tot alles is aangevinkt -->
+            <!-- Verbergen tot alles is aangevinkt -->
             <div id="dropLocationAlert" class="alert alert-success" style="display: none;">
                 <h4>Klaar!</h4>
                 <p>Breng deze order naar: <strong>@Model.DropLocation</strong></p>

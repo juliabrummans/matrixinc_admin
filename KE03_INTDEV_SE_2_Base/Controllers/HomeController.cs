@@ -6,7 +6,6 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
     {
         public IActionResult Index()
         {
-            // Laadt het originele dashboard met de vierkanten
             return View();
         }
 

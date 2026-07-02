@@ -18,12 +18,10 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             _context = context;
         }
 
-        // GET: Products (SEARCH + FILTER + CASE INSENSITIVE)
         public async Task<IActionResult> Index(string searchString, decimal? minPrice, decimal? maxPrice)
         {
             var products = _context.Products.AsQueryable();
 
-            // SEARCH (case-insensitive)
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 searchString = searchString.ToLower();
@@ -33,13 +31,11 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
                     p.Name.ToLower().Contains(searchString));
             }
 
-            // FILTER: min price
             if (minPrice.HasValue)
             {
                 products = products.Where(p => p.Price >= minPrice.Value);
             }
 
-            // FILTER: max price
             if (maxPrice.HasValue)
             {
                 products = products.Where(p => p.Price <= maxPrice.Value);
@@ -48,7 +44,6 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(await products.ToListAsync());
         }
 
-        // AUTOCOMPLETE (CASE INSENSITIVE)
         [HttpGet]
         public async Task<IActionResult> SearchSuggestions(string term)
         {
@@ -67,7 +62,6 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return Json(results);
         }
 
-        // DETAILS
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -80,7 +74,6 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(product);
         }
 
-        // CREATE
         public IActionResult Create()
         {
             return View();
@@ -100,7 +93,6 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(product);
         }
 
-        // EDIT
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -128,7 +120,6 @@ namespace KE03_INTDEV_SE_2_Base.Controllers
             return View(product);
         }
 
-        // DELETE
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
