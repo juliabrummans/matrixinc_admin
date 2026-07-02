@@ -1,150 +1,73 @@
-﻿using DataAccessLayer;
-using DataAccessLayer.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using KE03_INTDEV_SE_2_Base.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace KE03_INTDEV_SE_2_Base.Controllers
 {
     public class OrdersController : Controller
     {
-        private readonly MatrixIncDbContext _context;
-
-        public OrdersController(MatrixIncDbContext context)
+        public static List<OrderPickViewModel> MockOrders = new List<OrderPickViewModel>
         {
-            _context = context;
-        }
-
-       
-        public async Task<IActionResult> Index()
-        {
-            var orders = await _context.Orders
-                .Include(o => o.Customer)
-                .Include(o => o.Products)
-                .ToListAsync();
-
-            return View(orders);
-        }
-
-        
-        public IActionResult Create()
-        {
-            ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name");
-            ViewBag.Products = new SelectList(_context.Products, "Id", "Name");
-
-            return View();
-        }
-
-       
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int customerId, int productId, DateTime orderDate)
-        {
-            var customer = await _context.Customers.FindAsync(customerId);
-            var product = await _context.Products.FindAsync(productId);
-
-            if (customer == null || product == null)
-            {
-                return NotFound();
+            new OrderPickViewModel {
+                OrderId = 1042, DropLocation = " F.01 ", Status = "Te verwerken", StatusColor = "danger",
+                Items = new List<OrderPickViewModel.PickItemViewModel> {
+                    new OrderPickViewModel.PickItemViewModel { ProductId = 1, Quantity = 5, ProductName = "Verzinkte spaanplaatschroef 3,0 x 12 mm Torx", ProductLocation = "B.12.02", IsPicked = false },
+                    new OrderPickViewModel.PickItemViewModel { ProductId = 2, Quantity = 2, ProductName = "Hardhoutschroef RVS A4 5 x 60 mm Torx 25", ProductLocation = "B.12.01", IsPicked = false }
+                }
+            },
+            new OrderPickViewModel {
+                OrderId = 1043, DropLocation = "F.02", Status = "Te verwerken", StatusColor = "danger",
+                Items = new List<OrderPickViewModel.PickItemViewModel> {
+                    new OrderPickViewModel.PickItemViewModel { ProductId = 3, Quantity = 10, ProductName = "Schroef a34 ", ProductLocation = "C.05.09", IsPicked = false }
+                }
+            },
+            new OrderPickViewModel {
+                OrderId = 1044, DropLocation = "Verzonden", Status = "Afgehandeld", StatusColor = "success",
+                Items = new List<OrderPickViewModel.PickItemViewModel> {
+                    new OrderPickViewModel.PickItemViewModel { ProductId = 4, Quantity = 3, ProductName = "Peer", ProductLocation = "A.01.05", IsPicked = true }
+                }
             }
+        };
 
-            var order = new Order
-            {
-                CustomerId = customerId,
-                OrderDate = orderDate
-            };
-
-            order.Products.Add(product);
-
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
+        [HttpGet]
+        public IActionResult Index()
+        {
+            var tePicken = MockOrders.Where(o => o.Status == "Te verwerken").ToList();
+            return View(tePicken);
         }
 
-       
-        public async Task<IActionResult> Details(int id)
+        [HttpGet]
+        public IActionResult Historie()
         {
-            var order = await _context.Orders
-                .Include(o => o.Customer)
-                .Include(o => o.Products)
-                .FirstOrDefaultAsync(o => o.Id == id);
+            var afgehandeld = MockOrders.Where(o => o.Status == "Afgehandeld").ToList();
+            return View(afgehandeld);
+        }
 
+        [HttpGet]
+        public IActionResult PickOrder(int id)
+        {
+            var order = MockOrders.FirstOrDefault(o => o.OrderId == id);
             if (order == null) return NotFound();
-
             return View(order);
         }
-
-        
-        public async Task<IActionResult> Delete(int id)
-        {
-            var order = await _context.Orders
-                .Include(o => o.Customer)
-                .FirstOrDefaultAsync(o => o.Id == id);
-
-            if (order == null) return NotFound();
-
-            return View(order);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var order = await _context.Orders
-                .Include(o => o.Products)
-                .FirstOrDefaultAsync(o => o.Id == id);
-
-            if (order != null)
-            {
-                order.Products.Clear();
-                _context.Orders.Remove(order);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> Edit(int id)
-        {
-            var order = await _context.Orders
-                .Include(o => o.Products)
-                .FirstOrDefaultAsync(o => o.Id == id);
-
-            if (order == null) return NotFound();
-
-            ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name");
-            ViewBag.Products = new SelectList(_context.Products, "Id", "Name");
-
-            return View(order);
-        }
-
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Order order)
+        public IActionResult PickOrder(OrderPickViewModel model)
         {
-            if (id != order.Id)
+            if (ModelState.IsValid)
             {
-                return NotFound();
+                var order = MockOrders.FirstOrDefault(o => o.OrderId == model.OrderId);
+                if (order != null)
+                {
+                    order.Status = "Afgehandeld";
+                    order.StatusColor = "success";
+                    foreach (var item in order.Items) { item.IsPicked = true; }
+                }
+
+                return RedirectToAction("Index");
             }
-
-            var existingOrder = await _context.Orders.FindAsync(id);
-
-            if (existingOrder == null)
-            {
-                return NotFound();
-            }
-
-            existingOrder.OrderDate = order.OrderDate;
-            existingOrder.CustomerId = order.CustomerId;
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
+            return View(model);
         }
-
-
-
     }
 }

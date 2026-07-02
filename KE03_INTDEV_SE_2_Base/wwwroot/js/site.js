@@ -6,7 +6,7 @@
         searchBox.addEventListener("input", function () {
         const value = this.value;
 
-        // leeg → geen suggesties
+      
         if (!value) {
             suggestions.innerHTML = "";
         return;
@@ -26,7 +26,7 @@
         li.style.cursor = "pointer";
         li.textContent = item;
 
-        // klik = invullen + dropdown sluiten
+     
         li.addEventListener("click", function () {
             searchBox.value = item;
         suggestions.innerHTML = "";

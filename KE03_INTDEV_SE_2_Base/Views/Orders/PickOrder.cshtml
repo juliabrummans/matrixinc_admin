@@ -1,0 +1,62 @@
+﻿@model KE03_INTDEV_SE_2_Base.Models.OrderPickViewModel
+
+@{
+    ViewData["Title"] = "Order Picken";
+}
+
+<h2>Order #@Model.OrderId Picken</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-7">
+        <form asp-action="PickOrder" method="post">
+            <input type="hidden" asp-for="OrderId" />
+            <input type="hidden" asp-for="DropLocation" />
+
+            <ul class="list-group mb-4">
+                @for (int i = 0; i < Model.Items.Count; i++)
+                {
+                    <li class="list-group-item d-flex align-items-center">
+                        <input type="hidden" asp-for="Items[i].ProductId" />
+                        <input type="hidden" asp-for="Items[i].ProductName" />
+                        <input type="hidden" asp-for="Items[i].Quantity" />
+                        <input type="hidden" asp-for="Items[i].ProductLocation" />
+                        
+                        <!-- checkbox -->
+                        <input type="checkbox" asp-for="Items[i].IsPicked" class="pick-checkbox form-check-input me-3" style="width: 20px; height: 20px;" id="item_@i" />
+                        
+                        <!-- Aantal en Productnaam (Locatie) -->
+                        <label class="form-check-label fs-5" for="item_@i">
+                            <strong>@Model.Items[i].Quantity x</strong> @Model.Items[i].ProductName <span class="text-primary fw-bold ms-2">(@Model.Items[i].ProductLocation)</span>
+                        </label>
+                    </li>
+                }
+            </ul>
+
+            <!-- Verbergen tot alles is aangevinkt -->
+            <div id="dropLocationAlert" class="alert alert-success" style="display: none;">
+                <h4>Klaar!</h4>
+                <p>Breng deze order naar: <strong>@Model.DropLocation</strong></p>
+                <button type="submit" class="btn btn-success mt-2">Order Afronden</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.pick-checkbox').change(function () {
+                var total = $('.pick-checkbox').length;
+                var checked = $('.pick-checkbox:checked').length;
+
+                if (total === checked && total > 0) {
+                    $('#dropLocationAlert').slideDown();
+                } else {
+                    $('#dropLocationAlert').slideUp();
+                }
+            });
+        });
+    </script>
+}
